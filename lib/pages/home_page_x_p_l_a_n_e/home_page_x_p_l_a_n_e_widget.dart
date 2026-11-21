@@ -18388,7 +18388,7 @@ class _HomePageXPLANEWidgetState extends State<HomePageXPLANEWidget> {
                                                       'sim/flightmodel/position/local_y',
                                                       getJsonField(
                                                         _model.terrainData,
-                                                        r'''$.elevation_m''',
+                                                        r'''$.elevation_ft''',
                                                       ),
                                                       FFAppState().ipPC,
                                                     );
@@ -18467,7 +18467,7 @@ class _HomePageXPLANEWidgetState extends State<HomePageXPLANEWidget> {
                                                         content: Text(
                                                           getJsonField(
                                                             _model.terrainData,
-                                                            r'''$.elevation_m''',
+                                                            r'''$.elevation_ft''',
                                                           ).toString(),
                                                           style: TextStyle(
                                                             color: FlutterFlowTheme
