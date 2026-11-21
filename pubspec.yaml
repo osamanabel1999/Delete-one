@@ -58,7 +58,7 @@ dependencies:
   path_provider: 2.1.4
   path_provider_android: 2.2.10
   path_provider_foundation: 2.4.0
-  path_provider_linux: 2.1.2
+  path_provider_linux: 2.2.1
   path_provider_platform_interface: 2.1.2
   path_provider_windows: 2.3.0
   pdfx: any
@@ -78,7 +78,7 @@ dependencies:
   shared_preferences_linux: 2.4.1
   shared_preferences_platform_interface: 2.4.1
   shared_preferences_web: 2.4.3
-  shared_preferences_windows: 2.3.0
+  shared_preferences_windows: 2.4.1
   speech_to_text: ^7.0.0
   sqflite: 2.3.3+1
   sqflite_common: 2.5.4+3
