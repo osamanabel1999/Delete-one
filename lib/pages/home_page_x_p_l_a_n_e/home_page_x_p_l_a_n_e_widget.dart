@@ -18362,10 +18362,8 @@ class _HomePageXPLANEWidgetState extends State<HomePageXPLANEWidget> {
                                                       FFAppState().CurrentY,
                                                       FFAppState().currentALT,
                                                       getJsonField(
-                                                        (_model.elevationDataXplaneRWY1
-                                                                ?.jsonBody ??
-                                                            ''),
-                                                        r'''$.results[0].elevation''',
+                                                        _model.terrainData,
+                                                        r'''$.elevation_m''',
                                                       ),
                                                     );
                                                     await actions
@@ -18386,10 +18384,7 @@ class _HomePageXPLANEWidgetState extends State<HomePageXPLANEWidget> {
                                                     await actions
                                                         .setXPlaneDataRef(
                                                       'sim/flightmodel/position/local_y',
-                                                      getJsonField(
-                                                        _model.terrainData,
-                                                        r'''$.elevation_ft''',
-                                                      ),
+                                                      _model.finalYtakeoff!,
                                                       FFAppState().ipPC,
                                                     );
                                                     await actions
@@ -18465,10 +18460,15 @@ class _HomePageXPLANEWidgetState extends State<HomePageXPLANEWidget> {
                                                         .showSnackBar(
                                                       SnackBar(
                                                         content: Text(
-                                                          getJsonField(
+                                                          '${getJsonField(
                                                             _model.terrainData,
                                                             r'''$.elevation_ft''',
-                                                          ).toString(),
+                                                          ).toString()}${getJsonField(
+                                                            (_model.elevationDataXplaneRWY1
+                                                                    ?.jsonBody ??
+                                                                ''),
+                                                            r'''$.results[0].elevation''',
+                                                          ).toString()}',
                                                           style: TextStyle(
                                                             color: FlutterFlowTheme
                                                                     .of(context)
