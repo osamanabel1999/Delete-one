@@ -2,7 +2,7 @@ name: simulator_station
 description: A new Flutter project.
 publish_to: 'none'
 
-version: 1.0.5+269
+version: 1.0.6+273
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -71,6 +71,7 @@ dependencies:
   pointer_interceptor_web: 0.10.2+1
   provider: 6.1.5
   purchases_flutter: 9.9.5
+  sensors_plus: ^6.1.2
   shared_preferences: 2.5.3
   shared_preferences_android: 2.4.10
   shared_preferences_foundation: 2.5.4
