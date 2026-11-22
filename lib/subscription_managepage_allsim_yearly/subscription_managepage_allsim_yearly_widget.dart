@@ -274,8 +274,10 @@ class _SubscriptionManagepageAllsimYearlyWidgetState
                     safeSetState(() {});
                   },
                   onManageAppleSubscription: () async {
-                    await launchURL(
-                        'https://apps.apple.com/account/subscriptions');
+                    if (isiOS == true) {
+                      await launchURL(
+                          'https://apps.apple.com/account/subscriptions');
+                    }
                   },
                   onSupportPressed: () async {
                     await launchURL('https://discord.gg/3jJkuQeKaz');

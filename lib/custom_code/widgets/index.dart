@@ -91,3 +91,4 @@ export '/custom_code/widgets/motion_xplane.dart' show MotionXplane;
 export '/custom_code/widgets/system_and_analysis_widget.dart'
     show SystemAndAnalysisWidget;
 export '/custom_code/widgets/motion_microsoft.dart' show MotionMicrosoft;
+export '/custom_code/widgets/aircraft_web_view.dart' show AircraftWebView;

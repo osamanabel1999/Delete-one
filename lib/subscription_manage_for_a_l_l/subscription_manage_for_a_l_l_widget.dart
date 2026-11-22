@@ -114,8 +114,10 @@ class _SubscriptionManageForALLWidgetState
                   width: double.infinity,
                   height: double.infinity,
                   onManageAppleSubscription: () async {
-                    await launchURL(
-                        'https://apps.apple.com/account/subscriptions');
+                    if (isiOS == true) {
+                      await launchURL(
+                          'https://apps.apple.com/account/subscriptions');
+                    }
                   },
                   onSupportPressed: () async {
                     await launchURL('https://discord.gg/3jJkuQeKaz');

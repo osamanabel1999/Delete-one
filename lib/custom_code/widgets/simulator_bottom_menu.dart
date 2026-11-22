@@ -75,7 +75,7 @@ class _SimulatorBottomMenuState extends State<SimulatorBottomMenu> {
     'POSITION',
     'PAUSE',
     'FREEZE',
-    'OVERHEAD',
+    'COCKPIT',
     'SYS & DATA',
     // Row 2 (Index 5 to 9)
     'GROUND OPS',

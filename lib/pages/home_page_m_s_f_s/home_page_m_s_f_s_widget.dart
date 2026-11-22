@@ -19197,11 +19197,15 @@ class _HomePageMSFSWidgetState extends State<HomePageMSFSWidget> {
                                                   width: double.infinity,
                                                   height: double.infinity,
                                                   child: custom_widgets
-                                                      .SystemWebView(
+                                                      .AircraftWebView(
                                                     width: double.infinity,
                                                     height: double.infinity,
-                                                    initialUrl:
+                                                    overhead:
                                                         'http://${FFAppState().ipPC}:9091',
+                                                    mcdu:
+                                                        'http://${FFAppState().ipPC}:8083/#/mcdu',
+                                                    efb:
+                                                        'http://${FFAppState().ipPC}:8083',
                                                   ),
                                                 ),
                                               ),
