@@ -18,7 +18,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 
 class HomePageXPLANEModel extends FlutterFlowModel<HomePageXPLANEWidget> {
@@ -108,8 +107,6 @@ class HomePageXPLANEModel extends FlutterFlowModel<HomePageXPLANEWidget> {
   dynamic? vectorsResult4;
   // Stores action output result for [Custom Action - calculateVelocityVectorsXPlane] action in Xplin widget.
   dynamic? vectorsResult7;
-  // Stores action output result for [Custom Action - getTerrainElevation] action in Xplin widget.
-  dynamic? terrainData;
   // Stores action output result for [Backend Call - API (GetElevation)] action in Xplin widget.
   ApiCallResponse? elevationDataXplaneRWY1;
   // Stores action output result for [Custom Action - calculateVelocityVectorsXPlane] action in Xplin widget.

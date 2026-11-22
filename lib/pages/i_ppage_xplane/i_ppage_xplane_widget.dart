@@ -45,6 +45,9 @@ class _IPpageXplaneWidgetState extends State<IPpageXplaneWidget> {
       );
       FFAppState().usersubscription = _model.xplanePageRes!;
       safeSetState(() {});
+      await actions.checkWeeklyDiscordSheet(
+        context,
+      );
     });
 
     _model.textFieldipPcTextController ??=

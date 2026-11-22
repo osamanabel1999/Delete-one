@@ -202,3 +202,5 @@ export '/custom_code/actions/start_simulator_data_fetch.dart'
     show startSimulatorDataFetch;
 export '/custom_code/actions/get_terrain_elevation.dart'
     show getTerrainElevation;
+export '/custom_code/actions/check_weekly_discord_sheet.dart'
+    show checkWeeklyDiscordSheet;

@@ -19,7 +19,6 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 import 'home_page_m_s_f_s_model.dart';
 export 'home_page_m_s_f_s_model.dart';
@@ -16570,13 +16569,8 @@ class _HomePageMSFSWidgetState extends State<HomePageMSFSWidget> {
                                                                               .transparent,
                                                                       onTap:
                                                                           () async {
-                                                                        await launchUrl(
-                                                                            Uri(
-                                                                          scheme:
-                                                                              'mailto',
-                                                                          path:
-                                                                              'osamanabel1999@gmail.com',
-                                                                        ));
+                                                                        await launchURL(
+                                                                            'https://discord.gg/3jJkuQeKaz');
                                                                       },
                                                                       child:
                                                                           AnimatedContainer(

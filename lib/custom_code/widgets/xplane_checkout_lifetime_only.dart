@@ -145,130 +145,197 @@ class _XplaneCheckoutLifetimeOnlyState
       width: widget.width ?? double.infinity,
       height: widget.height ?? double.infinity,
       color: _bg,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text(
-              "X-Plane\nUltimate Pass",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: _white,
-                fontSize: 28,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 0.2,
-                height: 1.2,
-              ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final double availableWidth = constraints.maxWidth.isFinite
+              ? constraints.maxWidth
+              : MediaQuery.of(context).size.width;
+          final bool isTablet = availableWidth >= 720;
+          final bool isCompactTablet = isTablet && availableWidth < 840;
+          final double horizontalPadding =
+              isCompactTablet ? 20 : (isTablet ? 32 : 20);
+          final double columnGap = isCompactTablet ? 18 : 24;
+
+          return SingleChildScrollView(
+            padding: EdgeInsets.symmetric(
+              horizontal: horizontalPadding,
+              vertical: 32,
             ),
-            const SizedBox(height: 12),
-            const Text(
-              "Why pay monthly? Secure your access today and enjoy uninterrupted, unlimited X-Plane features.",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: _muted,
-                fontSize: 15,
-                height: 1.5,
-              ),
-            ),
-            const SizedBox(height: 32),
-
-            // --- Elegant Countdown Timer ---
-            _buildTimerWidget(),
-
-            const SizedBox(height: 32),
-
-            // --- Premium Yearly Card ---
-            _buildPremiumYearlyCard(currentYearlyPriceRaw),
-
-            const SizedBox(height: 36),
-
-            // --- Premium Lifetime Card (RECOMMENDED) ---
-            _buildPremiumLifetimeCard(currentPriceRaw),
-
-            const SizedBox(height: 32),
-
-            // --- Clean Bundle Offer ---
-            _buildBundleOffer(),
-
-            const SizedBox(height: 48),
-
-            // --- Footer ---
-            const Divider(color: _border, thickness: 1),
-            const SizedBox(height: 16),
-            InkWell(
-              onTap: () async {
-                if (widget.onContactUs != null) {
-                  await widget.onContactUs!();
-                }
-              },
-              borderRadius: BorderRadius.circular(8),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Icon(Icons.support_agent_rounded, color: _muted, size: 20),
-                    SizedBox(width: 8),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: isTablet ? 900 : double.infinity,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
                     Text(
-                      "Need Help? Contact Support",
+                      isTablet
+                          ? "X-Plane Ultimate Pass"
+                          : "X-Plane\nUltimate Pass",
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: _muted,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+                        color: _white,
+                        fontSize: isTablet ? 32 : 28,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.2,
+                        height: 1.2,
                       ),
                     ),
+                    const SizedBox(height: 12),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: isTablet ? 580 : double.infinity,
+                      ),
+                      child: const Text(
+                        "Why pay monthly? Secure your access today and enjoy uninterrupted, unlimited X-Plane features.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: _muted,
+                          fontSize: 15,
+                          height: 1.5,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+
+                    // --- Elegant Countdown Timer ---
+                    _buildTimerWidget(),
+
+                    SizedBox(height: isTablet ? 40 : 32),
+
+                    // --- PLANS: 2 Columns Side-by-Side on iPad/Tablet, Stacked on Mobile ---
+                    if (isTablet)
+                      IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(
+                              child: _buildPremiumYearlyCard(
+                                currentYearlyPriceRaw,
+                                isTablet: true,
+                                isCompactTablet: isCompactTablet,
+                              ),
+                            ),
+                            SizedBox(width: columnGap),
+                            Expanded(
+                              child: _buildPremiumLifetimeCard(
+                                currentPriceRaw,
+                                isTablet: true,
+                                isCompactTablet: isCompactTablet,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    else ...[
+                      // --- Premium Yearly Card ---
+                      _buildPremiumYearlyCard(currentYearlyPriceRaw),
+
+                      const SizedBox(height: 36),
+
+                      // --- Premium Lifetime Card (RECOMMENDED) ---
+                      _buildPremiumLifetimeCard(currentPriceRaw),
+                    ],
+
+                    SizedBox(height: isTablet ? 40 : 32),
+
+                    // --- Clean Bundle Offer ---
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: isTablet ? 640 : double.infinity,
+                      ),
+                      child: _buildBundleOffer(),
+                    ),
+
+                    const SizedBox(height: 48),
+
+                    // --- Footer ---
+                    const Divider(color: _border, thickness: 1),
+                    const SizedBox(height: 16),
+                    InkWell(
+                      onTap: () async {
+                        if (widget.onContactUs != null) {
+                          await widget.onContactUs!();
+                        }
+                      },
+                      borderRadius: BorderRadius.circular(8),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: const [
+                            Icon(Icons.support_agent_rounded,
+                                color: _muted, size: 20),
+                            SizedBox(width: 8),
+                            Text(
+                              "Need Help? Contact Support",
+                              style: TextStyle(
+                                color: _muted,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // --- Legal Links ---
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            if (widget.onTermsOfUse != null) {
+                              await widget.onTermsOfUse!();
+                            }
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            child: Text(
+                              "Terms of Use",
+                              style: TextStyle(
+                                color: _muted,
+                                fontSize: 12,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Text("•",
+                            style: TextStyle(color: _border, fontSize: 12)),
+                        InkWell(
+                          onTap: () async {
+                            if (widget.onPrivacyPolicy != null) {
+                              await widget.onPrivacyPolicy!();
+                            }
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            child: Text(
+                              "Privacy Policy",
+                              style: TextStyle(
+                                color: _muted,
+                                fontSize: 12,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 16),
-
-            // --- Legal Links ---
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                InkWell(
-                  onTap: () async {
-                    if (widget.onTermsOfUse != null)
-                      await widget.onTermsOfUse!();
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    child: Text(
-                      "Terms of Use",
-                      style: TextStyle(
-                        color: _muted,
-                        fontSize: 12,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
-                ),
-                const Text("•", style: TextStyle(color: _border, fontSize: 12)),
-                InkWell(
-                  onTap: () async {
-                    if (widget.onPrivacyPolicy != null)
-                      await widget.onPrivacyPolicy!();
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    child: Text(
-                      "Privacy Policy",
-                      style: TextStyle(
-                        color: _muted,
-                        fontSize: 12,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -381,7 +448,11 @@ class _XplaneCheckoutLifetimeOnlyState
     );
   }
 
-  Widget _buildPremiumYearlyCard(String rawPriceString) {
+  Widget _buildPremiumYearlyCard(
+    String rawPriceString, {
+    bool isTablet = false,
+    bool isCompactTablet = false,
+  }) {
     final priceData = _parsePriceInfo(
       rawPriceString,
       fallbackNumber: "14.99",
@@ -390,6 +461,15 @@ class _XplaneCheckoutLifetimeOnlyState
     final String mainPrice = priceData['mainPrice']!;
     final String suffixText = priceData['suffix']!;
     final String originalPrice = priceData['originalPrice']!;
+
+    final EdgeInsets cardPadding = isCompactTablet
+        ? const EdgeInsets.fromLTRB(22, 28, 22, 24)
+        : const EdgeInsets.all(28);
+    final double priceFontSize = isCompactTablet ? 40 : (isTablet ? 44 : 48);
+    final double suffixFontSize = isCompactTablet ? 16 : 18;
+    final double featureFontSize = isCompactTablet ? 14 : 15;
+    final double buttonHeight = isCompactTablet ? 52 : 56;
+    final double buttonFontSize = isCompactTablet ? 16 : 17;
 
     List<String> hypedFeatures = [
       "Annual Unrestricted Full Access",
@@ -401,7 +481,7 @@ class _XplaneCheckoutLifetimeOnlyState
     ];
 
     return Container(
-      width: double.infinity,
+      width: isTablet ? null : double.infinity,
       decoration: BoxDecoration(
         color: _card,
         borderRadius: BorderRadius.circular(24),
@@ -419,7 +499,7 @@ class _XplaneCheckoutLifetimeOnlyState
         children: [
           Positioned(
             top: -14,
-            right: 24,
+            right: isCompactTablet ? 18 : 24,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               decoration: BoxDecoration(
@@ -445,8 +525,9 @@ class _XplaneCheckoutLifetimeOnlyState
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(28),
+            padding: cardPadding,
             child: Column(
+              mainAxisSize: isTablet ? MainAxisSize.max : MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
@@ -466,32 +547,38 @@ class _XplaneCheckoutLifetimeOnlyState
                   children: [
                     Text(
                       mainPrice,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: _white,
-                        fontSize: 48,
+                        fontSize: priceFontSize,
                         fontWeight: FontWeight.w800,
                         letterSpacing: -1,
                       ),
                     ),
                     if (suffixText.isNotEmpty)
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 8, left: 2),
+                        padding: EdgeInsets.only(
+                          bottom: isCompactTablet ? 6 : 8,
+                          left: 2,
+                        ),
                         child: Text(
                           suffixText,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: _muted,
-                            fontSize: 18,
+                            fontSize: suffixFontSize,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 10, left: 8),
+                      padding: EdgeInsets.only(
+                        bottom: isCompactTablet ? 8 : 10,
+                        left: 8,
+                      ),
                       child: Text(
                         originalPrice,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: _muted,
-                          fontSize: 18,
+                          fontSize: suffixFontSize,
                           fontWeight: FontWeight.w500,
                           decoration: TextDecoration.lineThrough,
                           decorationColor: _muted,
@@ -510,7 +597,7 @@ class _XplaneCheckoutLifetimeOnlyState
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                const SizedBox(height: 32),
+                SizedBox(height: isCompactTablet ? 26 : 32),
                 Column(
                   children: hypedFeatures
                       .map((feat) => Padding(
@@ -524,9 +611,9 @@ class _XplaneCheckoutLifetimeOnlyState
                                 Expanded(
                                   child: Text(
                                     feat,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: _white,
-                                      fontSize: 15,
+                                      fontSize: featureFontSize,
                                       fontWeight: FontWeight.w500,
                                       height: 1.3,
                                     ),
@@ -537,10 +624,11 @@ class _XplaneCheckoutLifetimeOnlyState
                           ))
                       .toList(),
                 ),
-                const SizedBox(height: 32),
+                if (isTablet) const Spacer(),
+                SizedBox(height: isCompactTablet ? 24 : 32),
                 SizedBox(
                   width: double.infinity,
-                  height: 56,
+                  height: buttonHeight,
                   child: ElevatedButton(
                     onPressed: () async {
                       if (widget.onBuyYearly != null) {
@@ -559,11 +647,14 @@ class _XplaneCheckoutLifetimeOnlyState
                     ).copyWith(
                       elevation: MaterialStateProperty.all(8),
                     ),
-                    child: const Text(
-                      "Get Annual Access",
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        "Get Annual Access",
+                        style: TextStyle(
+                          fontSize: buttonFontSize,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ),
@@ -576,7 +667,11 @@ class _XplaneCheckoutLifetimeOnlyState
     );
   }
 
-  Widget _buildPremiumLifetimeCard(String rawPriceString) {
+  Widget _buildPremiumLifetimeCard(
+    String rawPriceString, {
+    bool isTablet = false,
+    bool isCompactTablet = false,
+  }) {
     final priceData = _parsePriceInfo(
       rawPriceString,
       fallbackNumber: "29.99",
@@ -585,6 +680,15 @@ class _XplaneCheckoutLifetimeOnlyState
     final String mainPrice = priceData['mainPrice']!;
     final String suffixText = priceData['suffix']!;
     final String originalPrice = priceData['originalPrice']!;
+
+    final EdgeInsets cardPadding = isCompactTablet
+        ? const EdgeInsets.fromLTRB(22, 28, 22, 24)
+        : const EdgeInsets.all(28);
+    final double priceFontSize = isCompactTablet ? 40 : (isTablet ? 44 : 48);
+    final double suffixFontSize = isCompactTablet ? 16 : 18;
+    final double featureFontSize = isCompactTablet ? 14 : 15;
+    final double buttonHeight = isCompactTablet ? 52 : 56;
+    final double buttonFontSize = isCompactTablet ? 16 : 17;
 
     List<String> hypedFeatures = [
       "Lifetime Unrestricted Full Access",
@@ -596,7 +700,7 @@ class _XplaneCheckoutLifetimeOnlyState
     ];
 
     return Container(
-      width: double.infinity,
+      width: isTablet ? null : double.infinity,
       decoration: BoxDecoration(
         color: _card,
         borderRadius: BorderRadius.circular(24),
@@ -615,70 +719,84 @@ class _XplaneCheckoutLifetimeOnlyState
           // Top Badges Row (RECOMMENDED + SAVE 25% TODAY)
           Positioned(
             top: -14,
-            left: 20,
-            right: 20,
+            left: isCompactTablet ? 14 : 20,
+            right: isCompactTablet ? 14 : 20,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Clean Classic Star Pill Badge
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: _accent,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: _accent.withOpacity(0.3),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      )
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      Icon(
-                        Icons.star_rounded,
-                        color: Color(0xFF0B111A),
-                        size: 15,
+                Flexible(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isCompactTablet ? 10 : 14,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: _accent,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: _accent.withOpacity(0.3),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        )
+                      ],
+                    ),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          Icon(
+                            Icons.star_rounded,
+                            color: Color(0xFF0B111A),
+                            size: 15,
+                          ),
+                          SizedBox(width: 4),
+                          Text(
+                            "RECOMMENDED",
+                            style: TextStyle(
+                              color: Color(0xFF0B111A),
+                              fontSize: 11,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.7,
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(width: 4),
-                      Text(
-                        "RECOMMENDED",
-                        style: TextStyle(
-                          color: Color(0xFF0B111A),
-                          fontSize: 11,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 0.7,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-
+                const SizedBox(width: 8),
                 // Discount Badge
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: _good,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: _good.withOpacity(0.2),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      )
-                    ],
-                  ),
-                  child: const Text(
-                    "SAVE 25% TODAY",
-                    style: TextStyle(
-                      color: Color(0xFF0B111A),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.5,
+                Flexible(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isCompactTablet ? 11 : 16,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: _good,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: _good.withOpacity(0.2),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        )
+                      ],
+                    ),
+                    child: const FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        "SAVE 25% TODAY",
+                        style: TextStyle(
+                          color: Color(0xFF0B111A),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -687,8 +805,9 @@ class _XplaneCheckoutLifetimeOnlyState
           ),
 
           Padding(
-            padding: const EdgeInsets.all(28),
+            padding: cardPadding,
             child: Column(
+              mainAxisSize: isTablet ? MainAxisSize.max : MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
@@ -708,32 +827,38 @@ class _XplaneCheckoutLifetimeOnlyState
                   children: [
                     Text(
                       mainPrice,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: _white,
-                        fontSize: 48,
+                        fontSize: priceFontSize,
                         fontWeight: FontWeight.w800,
                         letterSpacing: -1,
                       ),
                     ),
                     if (suffixText.isNotEmpty)
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 8, left: 2),
+                        padding: EdgeInsets.only(
+                          bottom: isCompactTablet ? 6 : 8,
+                          left: 2,
+                        ),
                         child: Text(
                           suffixText,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: _muted,
-                            fontSize: 18,
+                            fontSize: suffixFontSize,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 10, left: 8),
+                      padding: EdgeInsets.only(
+                        bottom: isCompactTablet ? 8 : 10,
+                        left: 8,
+                      ),
                       child: Text(
                         originalPrice,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: _muted,
-                          fontSize: 18,
+                          fontSize: suffixFontSize,
                           fontWeight: FontWeight.w500,
                           decoration: TextDecoration.lineThrough,
                           decorationColor: _muted,
@@ -752,7 +877,7 @@ class _XplaneCheckoutLifetimeOnlyState
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                const SizedBox(height: 32),
+                SizedBox(height: isCompactTablet ? 26 : 32),
                 Column(
                   children: hypedFeatures
                       .map((feat) => Padding(
@@ -766,9 +891,9 @@ class _XplaneCheckoutLifetimeOnlyState
                                 Expanded(
                                   child: Text(
                                     feat,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: _white,
-                                      fontSize: 15,
+                                      fontSize: featureFontSize,
                                       fontWeight: FontWeight.w500,
                                       height: 1.3,
                                     ),
@@ -779,10 +904,11 @@ class _XplaneCheckoutLifetimeOnlyState
                           ))
                       .toList(),
                 ),
-                const SizedBox(height: 32),
+                if (isTablet) const Spacer(),
+                SizedBox(height: isCompactTablet ? 24 : 32),
                 SizedBox(
                   width: double.infinity,
-                  height: 56,
+                  height: buttonHeight,
                   child: ElevatedButton(
                     onPressed: () async {
                       if (widget.onBuyLifetime != null) {
@@ -801,11 +927,14 @@ class _XplaneCheckoutLifetimeOnlyState
                     ).copyWith(
                       elevation: MaterialStateProperty.all(8),
                     ),
-                    child: const Text(
-                      "Get Lifetime Access",
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        "Get Lifetime Access",
+                        style: TextStyle(
+                          fontSize: buttonFontSize,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ),

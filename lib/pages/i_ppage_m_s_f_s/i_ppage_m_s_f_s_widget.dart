@@ -45,6 +45,9 @@ class _IPpageMSFSWidgetState extends State<IPpageMSFSWidget> {
       );
       FFAppState().usersubscription = _model.msfsPageRes!;
       safeSetState(() {});
+      await actions.checkWeeklyDiscordSheet(
+        context,
+      );
     });
 
     _model.textFieldipPcTextController ??=

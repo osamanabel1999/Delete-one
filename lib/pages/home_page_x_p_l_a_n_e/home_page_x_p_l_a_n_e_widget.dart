@@ -17,7 +17,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:webviewx_plus/webviewx_plus.dart';
 import 'home_page_x_p_l_a_n_e_model.dart';
 export 'home_page_x_p_l_a_n_e_model.dart';
@@ -15158,13 +15157,8 @@ class _HomePageXPLANEWidgetState extends State<HomePageXPLANEWidget> {
                                                                           .transparent,
                                                                   onTap:
                                                                       () async {
-                                                                    await launchUrl(
-                                                                        Uri(
-                                                                      scheme:
-                                                                          'mailto',
-                                                                      path:
-                                                                          'osamanabel1999@gmail.com',
-                                                                    ));
+                                                                    await launchURL(
+                                                                        'https://discord.gg/3jJkuQeKaz');
                                                                   },
                                                                   child:
                                                                       AnimatedContainer(
@@ -17266,13 +17260,6 @@ class _HomePageXPLANEWidgetState extends State<HomePageXPLANEWidget> {
                                                 syncMode: FFAppState().syncMode,
                                                 onRunwaySelected:
                                                     (lat, lon, heading) async {
-                                                  _model.terrainData =
-                                                      await actions
-                                                          .getTerrainElevation(
-                                                    FFAppState().ipPC,
-                                                    FFAppState().radarLat,
-                                                    FFAppState().radarLon,
-                                                  );
                                                   _model.elevationDataXplaneRWY1 =
                                                       await GetElevationCall
                                                           .call(
@@ -18362,8 +18349,10 @@ class _HomePageXPLANEWidgetState extends State<HomePageXPLANEWidget> {
                                                       FFAppState().CurrentY,
                                                       FFAppState().currentALT,
                                                       getJsonField(
-                                                        _model.terrainData,
-                                                        r'''$.elevation_m''',
+                                                        (_model.elevationDataXplaneRWY1
+                                                                ?.jsonBody ??
+                                                            ''),
+                                                        r'''$.results[0].elevation''',
                                                       ),
                                                     );
                                                     await actions
@@ -18454,34 +18443,6 @@ class _HomePageXPLANEWidgetState extends State<HomePageXPLANEWidget> {
                                                       'sim/operation/override/override_planepath[0]',
                                                       0.0,
                                                       FFAppState().ipPC,
-                                                    );
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                        content: Text(
-                                                          '${getJsonField(
-                                                            _model.terrainData,
-                                                            r'''$.elevation_ft''',
-                                                          ).toString()}${getJsonField(
-                                                            (_model.elevationDataXplaneRWY1
-                                                                    ?.jsonBody ??
-                                                                ''),
-                                                            r'''$.results[0].elevation''',
-                                                          ).toString()}',
-                                                          style: TextStyle(
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .primaryText,
-                                                          ),
-                                                        ),
-                                                        duration: Duration(
-                                                            milliseconds: 4000),
-                                                        backgroundColor:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .secondary,
-                                                      ),
                                                     );
                                                   } else {
                                                     ScaffoldMessenger.of(
